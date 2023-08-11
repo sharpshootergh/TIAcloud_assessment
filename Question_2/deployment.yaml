@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-deployment
+  namespace: tiacourses
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+      - name: busybox
+        image: busybox:latest
+        command: ["/bin/sh", "-c"]
+        args: ["cat /home/config/message.txt"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /home/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: hello-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-config
+  namespace: tiacourses
+data:
+  message.txt: "hello world"

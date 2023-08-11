@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tiacourses
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tiacloud-deployment
+  labels:
+    app: app1
+    app: dev
+    tier: tiacloud
+  namespace: tiacourses
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app1
+      app: dev
+      tier: tiacloud
+  template:
+    metadata:
+      labels:
+       app: app1
+       app: dev
+       tier: tiacloud
+    spec:
+      containers:
+      - name: tiacloud-container
+        image: tiacloud:0.0.1    
+        ports:
+          - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tiacloud-service
+  namespace: tiacourses 
+spec:
+selector:
+    app: app1
+    app: dev
+    tier: tiacloud
+  ports:
+    - protocol: TCP
+      Port: 5000
+      targetPort: 80
+  type: ClusterIP  
+    
+
