@@ -2,6 +2,9 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: tiacourses
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Namespace","metadata":{"name":"tiacourses","labels":{...}}}
 
 ---
 
@@ -11,7 +14,7 @@ metadata:
   name: tiacloud-deployment
   labels:
     app: app1
-    app: dev
+    app-env: dev
     tier: tiacloud
   namespace: tiacourses
 spec:
@@ -19,13 +22,13 @@ spec:
   selector:
     matchLabels:
       app: app1
-      app: dev
+      app-env: dev
       tier: tiacloud
   template:
     metadata:
       labels:
        app: app1
-       app: dev
+       app-env: dev
        tier: tiacloud
     spec:
       containers:
@@ -42,13 +45,13 @@ metadata:
   name: tiacloud-service
   namespace: tiacourses 
 spec:
-selector:
+  selector:
     app: app1
-    app: dev
+    app-env: dev
     tier: tiacloud
   ports:
     - protocol: TCP
-      Port: 5000
+      port: 5000
       targetPort: 80
   type: ClusterIP  
     
