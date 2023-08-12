@@ -18,8 +18,11 @@ spec:
       containers:
       - name: busybox
         image: busybox:latest
-        command: ["/bin/sh", "-c"]
-        args: ["cat /home/config/message.txt"]
+        command: 
+          - "/bin/sh"
+          - "-c" 
+          - "cat /home/config/message.txt"
+          - "while true; do sleep 60; done"
         volumeMounts:
         - name: config-volume
           mountPath: /home/config
